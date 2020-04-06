@@ -1,0 +1,19 @@
+---
+version: ~> 2.0
+language: shell
+os: linux
+dist: xenial
+
+install:
+  - wget https://apt.puppet.com/puppet-tools-release-xenial.deb
+  - sudo dpkg -i puppet-tools-release-xenial.deb
+  - sudo apt-get update
+  - sudo apt-get install puppet-bolt
+  - 'mkdir -p ~/.puppetlabs/bolt'
+
+jobs:
+  include:
+    - stage: test
+      name: 'bolt plan run bolttest::apply'
+      script:
+        - 'bolt plan run bolttest::apply'
