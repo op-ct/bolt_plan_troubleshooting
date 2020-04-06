@@ -1,23 +1,14 @@
-# A plan to test how localhost `local`
-#
-# @usage:
-#    bolt plan run bolttest::apply
-#
-#
-#
-#
 plan bolttest::apply(
   TargetSpec $targets = get_targets('localhost'),
   String[1] $project_dir = system::env('PWD')
 ){
-
   # Add a new Target to a 'local' transport inventory group :
   $named_local_target = Target.new( 'name' => 'named_local_target' )
   $named_local_target.add_to_group( 'named_local_targets' )
 
-  $both_targets = [$targets[0], $named_local_target]
-
-  $both_targets.each |$target| {
+  # - Write a file using each taret's vars
+  # - Compare using a command, task, and apply block
+  [$targets[0], $named_local_target].each |$target| {
     out::message( "\n==== target '${target}'" )
 
     run_command(
@@ -36,6 +27,7 @@ plan bolttest::apply(
       '_catch_errors' => false
     )
 
+    # Succeeds with `localhost`, fails with `named_local_target` (bolt 2.3.1)
     apply(
       $target,
       '_description' => 'Test apply()',
