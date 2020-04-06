@@ -1,0 +1,18 @@
+---
+version: 2
+
+config:
+  transport: local
+  local:
+    tmpdir:
+     _plugin: env_var
+     var: PWD
+
+vars:
+  content: 'default content'
+
+groups:
+  - name: named_local_targets
+    targets: []
+    vars:
+      content: 'group content for named_local_targets'
